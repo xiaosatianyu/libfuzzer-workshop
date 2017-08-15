@@ -1,5 +1,5 @@
 CXX= clang++
-CFLAGS= -g -O0 -fno-omit-frame-pointer -std=c++11 -c
+CFLAGS= -g -O0 -fno-omit-frame-pointer -std=c++11 -c  -Wall 
 all: libFuzzer.a
 
 libFuzzer.a: FuzzerCrossOver.o FuzzerDriver.o FuzzerExtFunctionsDlsym.o FuzzerExtFunctionsDlsymWin.o FuzzerExtFunctionsWeakAlias.o FuzzerExtFunctionsWeak.o  FuzzerIO.o FuzzerIOPosix.o FuzzerIOWindows.o FuzzerLoop.o FuzzerMain.o FuzzerMerge.o FuzzerMutate.o FuzzerSHA1.o FuzzerShmemPosix.o FuzzerShmemWindows.o FuzzerTracePC.o FuzzerTraceState.o FuzzerUtil.o FuzzerUtilDarwin.o FuzzerUtilLinux.o FuzzerUtilPosix.o FuzzerUtilWindows.o
@@ -7,51 +7,51 @@ libFuzzer.a: FuzzerCrossOver.o FuzzerDriver.o FuzzerExtFunctionsDlsym.o FuzzerEx
 	ranlib libFuzzer.a
 
 FuzzerCrossOver.o: FuzzerCrossOver.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerCrossOver.cpp
+	clang++ $(CFLAGS) FuzzerCrossOver.cpp
 FuzzerDriver.o: FuzzerDriver.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerDriver.cpp
+	clang++ $(CFLAGS)  FuzzerDriver.cpp
 FuzzerExtFunctionsDlsym.o: FuzzerExtFunctionsDlsym.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerExtFunctionsDlsym.cpp
+	clang++ $(CFLAGS)  FuzzerExtFunctionsDlsym.cpp
 FuzzerExtFunctionsDlsymWin.o: FuzzerExtFunctionsDlsymWin.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerExtFunctionsDlsymWin.cpp
+	clang++ $(CFLAGS)  FuzzerExtFunctionsDlsymWin.cpp
 FuzzerExtFunctionsWeakAlias.o: FuzzerExtFunctionsWeakAlias.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerExtFunctionsWeakAlias.cpp
+	clang++ $(CFLAGS)  FuzzerExtFunctionsWeakAlias.cpp
 FuzzerExtFunctionsWeak.o: FuzzerExtFunctionsWeak.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerExtFunctionsWeak.cpp
+	clang++ $(CFLAGS)  FuzzerExtFunctionsWeak.cpp
 FuzzerIO.o: FuzzerIO.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerIO.cpp
+	clang++ $(CFLAGS)  FuzzerIO.cpp
 FuzzerIOPosix.o: FuzzerIOPosix.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerIOPosix.cpp
+	clang++ $(CFLAGS)  FuzzerIOPosix.cpp
 FuzzerIOWindows.o: FuzzerIOWindows.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerIOWindows.cpp
+	clang++ $(CFLAGS)  FuzzerIOWindows.cpp
 FuzzerLoop.o: FuzzerLoop.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerLoop.cpp
+	clang++ $(CFLAGS)  FuzzerLoop.cpp
 FuzzerMain.o: FuzzerMain.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerMain.cpp
+	clang++ $(CFLAGS)  FuzzerMain.cpp
 FuzzerMerge.o: FuzzerMerge.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerMerge.cpp
+	clang++$(CFLAGS)  FuzzerMerge.cpp
 FuzzerMutate.o: FuzzerMutate.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerMutate.cpp
+	clang++ $(CFLAGS)  FuzzerMutate.cpp
 FuzzerSHA1.o: FuzzerSHA1.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerSHA1.cpp
+	clang++ $(CFLAGS)  FuzzerSHA1.cpp
 FuzzerShmemPosix.o: FuzzerShmemPosix.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerShmemPosix.cpp
+	clang++ $(CFLAGS)  FuzzerShmemPosix.cpp
 FuzzerShmemWindows.o: FuzzerShmemWindows.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerShmemWindows.cpp
+	clang++ $(CFLAGS)  FuzzerShmemWindows.cpp
 FuzzerTracePC.o: FuzzerTracePC.cpp FuzzerTracePC.h
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerTracePC.cpp
+	clang++ $(CFLAGS)  FuzzerTracePC.cpp
 FuzzerTraceState.o: FuzzerTraceState.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerTraceState.cpp
+	clang++ $(CFLAGS)  FuzzerTraceState.cpp
 FuzzerUtil.o: FuzzerUtil.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerUtil.cpp
+	clang++ $(CFLAGS)  FuzzerUtil.cpp
 FuzzerUtilDarwin.o: FuzzerUtilDarwin.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerUtilDarwin.cpp
+	clang++ $(CFLAGS)  FuzzerUtilDarwin.cpp
 FuzzerUtilLinux.o: FuzzerUtilLinux.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerUtilLinux.cpp
+	clang++ $(CFLAGS)  FuzzerUtilLinux.cpp
 FuzzerUtilPosix.o: FuzzerUtilPosix.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerUtilPosix.cpp
+	clang++ $(CFLAGS)  FuzzerUtilPosix.cpp
 FuzzerUtilWindows.o: FuzzerUtilWindows.cpp
-	clang++ -Wall -c -g -O2 -std=c++11 FuzzerUtilWindows.cpp
+	clang++  $(CFLAGS)   FuzzerUtilWindows.cpp
 
 # FuzzerExtraCounters.o: FuzzerExtraCounters.cpp
 # 	clang++ -Wall -c -g -O2 -std=c++11 FuzzerExtraCounters.cpp
