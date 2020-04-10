@@ -427,9 +427,9 @@ int FuzzerDriver(int *argc, char ***argv, UserCallback Callback) {
   using namespace fuzzer;
   assert(argc && argv && "Argument pointers cannot be nullptr");
   std::string Argv0((*argv)[0]);
-  EF = new ExternalFunctions();
+  EF = new ExternalFunctions(); //用new即表示struct结构了
   if (EF->LLVMFuzzerInitialize)
-    EF->LLVMFuzzerInitialize(argc, argv);
+    EF->LLVMFuzzerInitialize(argc, argv); //
   const std::vector<std::string> Args(*argv, *argv + *argc);
   assert(!Args.empty());
   ProgName = new std::string(Args[0]);
