@@ -531,7 +531,7 @@ void MutationDispatcher::AddWordToManualDictionary(const Word &W) {
   ManualDictionary.push_back(
       {W, std::numeric_limits<size_t>::max()});
 }
-
+//增加一些字典
 void MutationDispatcher::AddWordToAutoDictionary(DictionaryEntry DE) {
   static const size_t kMaxAutoDictSize = 1 << 14;
   if (TempAutoDictionary.size() >= kMaxAutoDictSize) return;

@@ -1,6 +1,7 @@
 {
     "git.ignoreLimitWarning": true,
     "files.associations": {
-        "*.def": "cpp"
+        "*.def": "cpp",
+        "chrono": "cpp"
     }
 }
