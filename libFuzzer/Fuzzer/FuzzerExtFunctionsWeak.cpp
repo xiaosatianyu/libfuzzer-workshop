@@ -29,7 +29,7 @@ extern "C" {
 }
 
 using namespace fuzzer;
-
+//验证函数指针的存在性
 static void CheckFnPtr(void *FnPtr, const char *FnName, bool WarnIfMissing) {
   if (FnPtr == nullptr && WarnIfMissing) {
     Printf("WARNING: Failed to find function \"%s\".\n", FnName);

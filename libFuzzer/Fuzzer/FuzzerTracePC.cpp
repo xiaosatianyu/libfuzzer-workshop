@@ -35,7 +35,7 @@ uintptr_t __sancov_trace_pc_pcs[fuzzer::TracePC::kNumPCs];
 
 namespace fuzzer {
 
-TracePC TPC;
+TracePC TPC; //一个记录轨迹的全局类
 
 uint8_t *TracePC::Counters() const {
   return __sancov_trace_pc_guard_8bit_counters;

@@ -53,6 +53,7 @@ struct {
 #undef FUZZER_FLAG_STRING
 } Flags;
 //struct 数组初始化
+
 static const FlagDescription FlagDescriptions [] {
 #define FUZZER_DEPRECATED_FLAG(Name)                                           \
   {#Name, "Deprecated; don't use", 0, nullptr, nullptr, nullptr},
@@ -427,9 +428,9 @@ int FuzzerDriver(int *argc, char ***argv, UserCallback Callback) {
   using namespace fuzzer;
   assert(argc && argv && "Argument pointers cannot be nullptr");
   std::string Argv0((*argv)[0]);
-  EF = new ExternalFunctions();
-  if (EF->LLVMFuzzerInitialize)
-    EF->LLVMFuzzerInitialize(argc, argv);
+  EF = new ExternalFunctions(); //用new即表示struct结构,与类相似，调用其中的构造函数
+  if (EF->LLVMFuzzerInitialize) //调试的时候没有进入
+    EF->LLVMFuzzerInitialize(argc, argv); //这个为什么是外部函数呢？应该是会在链接过程
   const std::vector<std::string> Args(*argv, *argv + *argc);
   assert(!Args.empty());
   ProgName = new std::string(Args[0]);
@@ -517,20 +518,20 @@ int FuzzerDriver(int *argc, char ***argv, UserCallback Callback) {
   // Initialize Seed.
   if (Seed == 0)
     Seed =
-        std::chrono::system_clock::now().time_since_epoch().count() + GetPid();
+        std::chrono::system_clock::now().time_since_epoch().count() + GetPid();//利用时间随机生成初始种子
   if (Flags.verbosity)
     Printf("INFO: Seed: %u\n", Seed);
 
-  Random Rand(Seed);
-  auto *MD = new MutationDispatcher(Rand, Options);
-  auto *Corpus = new InputCorpus(Options.OutputCorpus);
-  auto *F = new Fuzzer(Callback, *Corpus, *MD, Options);
-
+  Random Rand(Seed); //利用随机数种子生成随机数生成器
+  auto *MD = new MutationDispatcher(Rand, Options); //初始化变异操作对象
+  auto *Corpus = new InputCorpus(Options.OutputCorpus); //初始化测试用例描述对象
+  auto *F = new Fuzzer(Callback, *Corpus, *MD, Options); //初始化一个fuzz工作对象，callback即为LLVMFuzzerTestOneInput
+  // 字典添加至变异对象
   for (auto &U: Dictionary)
     if (U.size() <= Word::GetMaxSize())
       MD->AddWordToManualDictionary(Word(U.data(), U.size()));
 
-  StartRssThread(F, Flags.rss_limit_mb);
+  StartRssThread(F, Flags.rss_limit_mb);//检测进程内存的线程
 
   Options.HandleAbrt = Flags.handle_abrt;
   Options.HandleBus = Flags.handle_bus;
@@ -641,7 +642,7 @@ int FuzzerDriver(int *argc, char ***argv, UserCallback Callback) {
   }
   F->ShuffleAndMinimize(&InitialCorpus);
   InitialCorpus.clear();  // Don't need this memory any more.
-  F->Loop();
+  F->Loop();// 进入循环
 
   if (Flags.verbosity)
     Printf("Done %zd runs in %zd second(s)\n", F->getTotalNumberOfRuns(),

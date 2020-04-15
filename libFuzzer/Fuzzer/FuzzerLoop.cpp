@@ -407,7 +407,7 @@ size_t Fuzzer::RunOne(const uint8_t *Data, size_t Size) {
 
   ExecuteCallback(Data, Size);
 
-  size_t Res = 0;
+  size_t Res = 0; //这个变量表示测试用例的属性
   if (size_t NumFeatures = TPC.CollectFeatures([&](size_t Feature) -> bool {
         return Corpus.AddFeature(Feature, Size, Options.Shrink);
       }))
@@ -582,7 +582,7 @@ void Fuzzer::MutateAndTestOne() {
     assert(NewSize <= CurrentMaxMutationLen && "Mutator return overisized unit");
     Size = NewSize;
     if (i == 0)
-      StartTraceRecording();
+      StartTraceRecording(); //仅仅进行一些初始化操作
     II.NumExecutedMutations++;
     if (size_t NumFeatures = RunOne(CurrentUnitData, Size)) {
       Corpus.AddToCorpus({CurrentUnitData, CurrentUnitData + Size}, NumFeatures,
@@ -612,7 +612,7 @@ void Fuzzer::Loop() {
       break;
     if (TimedOut()) break;
     // Perform several mutations and runs.
-    MutateAndTestOne();
+    MutateAndTestOne();//执行
   }
 
   PrintStats("DONE  ", "\n");

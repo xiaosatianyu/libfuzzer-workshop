@@ -14,7 +14,7 @@
 #include "FuzzerDefs.h"
 
 namespace fuzzer {
-
+//默认参数
 struct FuzzingOptions {
   int Verbosity = 1;
   size_t MaxLen = 0;
