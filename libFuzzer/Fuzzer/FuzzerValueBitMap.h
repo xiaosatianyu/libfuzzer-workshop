@@ -18,10 +18,10 @@ namespace fuzzer {
 
 // A bit map containing kMapSizeInWords bits.
 struct ValueBitMap {
-  static const size_t kMapSizeInBits = 1 << 16;
+  static const size_t kMapSizeInBits = 1 << 16; //65536bit,8192byte,
   static const size_t kMapPrimeMod = 65371;  // Largest Prime < kMapSizeInBits;
-  static const size_t kBitsInWord = (sizeof(uintptr_t) * 8);
-  static const size_t kMapSizeInWords = kMapSizeInBits / kBitsInWord;
+  static const size_t kBitsInWord = (sizeof(uintptr_t) * 8);  //字长，即cpu一次可操作的位数
+  static const size_t kMapSizeInWords = kMapSizeInBits / kBitsInWord; // 1014 个 64bit，
  public:
 
   // Clears all bits.
@@ -35,8 +35,8 @@ struct ValueBitMap {
     uintptr_t WordIdx = Idx / kBitsInWord;
     uintptr_t BitIdx = Idx % kBitsInWord;
     uintptr_t Old = Map[WordIdx];
-    uintptr_t New = Old | (1UL << BitIdx);
-    Map[WordIdx] = New;
+    uintptr_t New = Old | (1UL << BitIdx); //其中某位置1
+    Map[WordIdx] = New; //为什么要更新值
     return New != Old;
   }
 
@@ -44,7 +44,8 @@ struct ValueBitMap {
   inline bool AddValueModPrime(uintptr_t Value) {
     return AddValue(Value % kMapPrimeMod);
   }
-
+  
+  // get the value at Idx bit
   inline bool Get(uintptr_t Idx) {
     assert(Idx < kMapSizeInBits);
     uintptr_t WordIdx = Idx / kBitsInWord;
@@ -81,7 +82,7 @@ struct ValueBitMap {
       if (uintptr_t M = Map[i])
         for (size_t j = 0; j < sizeof(M) * 8; j++)
           if (M & ((uintptr_t)1 << j))
-            CB(i * sizeof(M) * 8 + j);
+            CB(i * sizeof(M) * 8 + j); // CB is
   }
 
  private:

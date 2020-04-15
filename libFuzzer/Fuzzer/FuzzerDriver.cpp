@@ -52,7 +52,7 @@ struct {
 #undef FUZZER_FLAG_UNSIGNED
 #undef FUZZER_FLAG_STRING
 } Flags;
-
+//struct 数组初始化
 static const FlagDescription FlagDescriptions [] {
 #define FUZZER_DEPRECATED_FLAG(Name)                                           \
   {#Name, "Deprecated; don't use", 0, nullptr, nullptr, nullptr},

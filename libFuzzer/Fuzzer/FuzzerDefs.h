@@ -39,7 +39,7 @@
 #define LIBFUZZER_POSIX LIBFUZZER_APPLE || LIBFUZZER_LINUX
 
 #ifdef __x86_64
-#define ATTRIBUTE_TARGET_POPCNT __attribute__((target("popcnt")))
+#define ATTRIBUTE_TARGET_POPCNT __attribute__((target("popcnt"))) //config the feature for multiversion of function, indicate it enable POPCNT instruction
 #else
 #define ATTRIBUTE_TARGET_POPCNT
 #endif
@@ -53,7 +53,7 @@
 #  define ALWAYS_INLINE
 #endif // __clang__
 
-#define ATTRIBUTE_NO_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
+#define ATTRIBUTE_NO_SANITIZE_ADDRESS __attribute__((no_sanitize_address)) //do not insert the address corresponding functions
 
 #define ATTRIBUTE_NO_SANITIZE_ALL ATTRIBUTE_NO_SANITIZE_ADDRESS ATTRIBUTE_NO_SANITIZE_MEMORY
 
@@ -61,7 +61,7 @@
 #if LIBFUZZER_WINDOWS
 #define ATTRIBUTE_INTERFACE __declspec(dllexport)
 #else
-#define ATTRIBUTE_INTERFACE __attribute__((visibility("default")))
+#define ATTRIBUTE_INTERFACE __attribute__((visibility("default"))) //表示这个函数会加入到动态表中
 #endif
 
 namespace fuzzer {
@@ -93,7 +93,7 @@ struct ScopedDoingMyOwnMemmem {
 };
 
 inline uint8_t  Bswap(uint8_t x)  { return x; }
-inline uint16_t Bswap(uint16_t x) { return __builtin_bswap16(x); }
+inline uint16_t Bswap(uint16_t x) { return __builtin_bswap16(x); }  //16位空间的大小端交换,这个函数来自于哪里
 inline uint32_t Bswap(uint32_t x) { return __builtin_bswap32(x); }
 inline uint64_t Bswap(uint64_t x) { return __builtin_bswap64(x); }
 

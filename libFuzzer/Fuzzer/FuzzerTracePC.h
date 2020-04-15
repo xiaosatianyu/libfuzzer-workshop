@@ -34,7 +34,7 @@ struct TableOfRecentCompares {
     T A, B;
   };
   ATTRIBUTE_NO_SANITIZE_ALL
-  void Insert(size_t Idx, T Arg1, T Arg2) {
+  void Insert(size_t Idx, T Arg1, T Arg2) { // Idx如何排序
     Idx = Idx % kSize;
     Table[Idx].A = Arg1;
     Table[Idx].B = Arg2;
@@ -130,7 +130,7 @@ size_t TracePC::CollectFeatures(Callback CB) const {
       else if (Counter >= 3) Bit = 2;
       else if (Counter >= 2) Bit = 1;
       size_t Feature = (i * 8 + Bit);
-      if (CB(Feature))
+      if (CB(Feature)) //根据适应度函数计算
         Res++;
     }
   }
