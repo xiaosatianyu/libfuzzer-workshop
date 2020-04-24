@@ -63,17 +63,17 @@ void SetTimer(int Seconds) {
   if (setitimer(ITIMER_REAL, &T, nullptr)) {
     Printf("libFuzzer: setitimer failed with %d\n", errno);
     exit(1);
-  }
-  SetSigaction(SIGALRM, AlarmHandler);
+  }//设置定时器
+  SetSigaction(SIGALRM, AlarmHandler);//注册回调函数
 }
 
 void SetSignalHandler(const FuzzingOptions& Options) {
   if (Options.UnitTimeoutSec > 0)
-    SetTimer(Options.UnitTimeoutSec / 2 + 1);
+    SetTimer(Options.UnitTimeoutSec / 2 + 1); //设置了退出
   if (Options.HandleInt)
-    SetSigaction(SIGINT, InterruptHandler);
+    SetSigaction(SIGINT, InterruptHandler); //中断信号
   if (Options.HandleTerm)
-    SetSigaction(SIGTERM, InterruptHandler);
+    SetSigaction(SIGTERM, InterruptHandler);//中断信号
   if (Options.HandleSegv)
     SetSigaction(SIGSEGV, CrashHandler);
   if (Options.HandleBus)

@@ -196,7 +196,7 @@ void PrintPC(const char *SymbolizedFMT, const char *FallbackFMT, uintptr_t PC) {
 }
 
 unsigned NumberOfCpuCores() {
-  unsigned N = std::thread::hardware_concurrency();
+  unsigned N = std::thread::hardware_concurrency(); // cpu线程数量
   if (!N) {
     Printf("WARNING: std::thread::hardware_concurrency not well defined for "
            "your platform. Assuming CPU count of 1.\n");

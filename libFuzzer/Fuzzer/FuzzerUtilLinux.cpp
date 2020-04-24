@@ -16,7 +16,7 @@
 namespace fuzzer {
 
 int ExecuteCommand(const std::string &Command) {
-  return system(Command.c_str());
+  return system(Command.c_str()); //堵塞
 }
 
 } // namespace fuzzer

@@ -47,3 +47,7 @@ re2
 # pcre2 sources after unpacking.
 pcre2
 pcre2-10.00
+
+a.out
+
+.vscode/setting.json

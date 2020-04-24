@@ -117,13 +117,13 @@ Fuzzer::Fuzzer(UserCallback CB, InputCorpus &Corpus, MutationDispatcher &MD,
     : CB(CB), Corpus(Corpus), MD(MD), Options(Options) {
   if (EF->__sanitizer_set_death_callback)
     EF->__sanitizer_set_death_callback(StaticDeathCallback);
-  InitializeTraceState();
+  InitializeTraceState(); //跟踪某些内存信息
   assert(!F);
   F = this;
   TPC.ResetMaps();
   IsMyThread = true;
   if (Options.DetectLeaks && EF->__sanitizer_install_malloc_and_free_hooks)
-    EF->__sanitizer_install_malloc_and_free_hooks(MallocHook, FreeHook);
+    EF->__sanitizer_install_malloc_and_free_hooks(MallocHook, FreeHook); //安装hook函数
   TPC.SetUseCounters(Options.UseCounters);
   TPC.SetUseValueProfile(Options.UseValueProfile);
   TPC.SetPrintNewPCs(Options.PrintNewCovPcs);
@@ -133,7 +133,7 @@ Fuzzer::Fuzzer(UserCallback CB, InputCorpus &Corpus, MutationDispatcher &MD,
   if (!Options.OutputCorpus.empty() && Options.ReloadIntervalSec)
     EpochOfLastReadOfOutputCorpus = GetEpoch(Options.OutputCorpus);
   MaxInputLen = MaxMutationLen = Options.MaxLen;
-  AllocateCurrentUnitData();
+  AllocateCurrentUnitData(); //分配测试用例空间
   CurrentUnitSize = 0;
   memset(BaseSha1, 0, sizeof(BaseSha1));
 }
@@ -168,10 +168,10 @@ void Fuzzer::DeathCallback() {
   DumpCurrentUnit("crash-");
   PrintFinalStats();
 }
-
+//静态类函数
 void Fuzzer::StaticAlarmCallback() {
   assert(F);
-  F->AlarmCallback();
+  F->AlarmCallback();//利用全局变量F
 }
 
 void Fuzzer::StaticCrashSignalCallback() {

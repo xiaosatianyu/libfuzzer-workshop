@@ -38,7 +38,7 @@ struct InputInfo {
 
 class InputCorpus {
  public:
-  static const size_t kFeatureSetSize = 1 << 16;
+  static const size_t kFeatureSetSize = 1 << 16; //记录测试用例的特色数量
   InputCorpus(const std::string &OutputCorpus) : OutputCorpus(OutputCorpus) {
     memset(InputSizesPerFeature, 0, sizeof(InputSizesPerFeature));
     memset(SmallestElementPerFeature, 0, sizeof(SmallestElementPerFeature));

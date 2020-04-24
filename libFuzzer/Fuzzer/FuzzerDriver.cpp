@@ -36,7 +36,7 @@ struct FlagDescription {
   const char *Name;
   const char *Description;
   int   Default;
-  int   *IntFlag;
+  int   *IntFlag; //何用
   const char **StrFlag;
   unsigned int *UIntFlag;
 };
@@ -52,8 +52,9 @@ struct {
 #undef FUZZER_FLAG_UNSIGNED
 #undef FUZZER_FLAG_STRING
 } Flags;
-//struct 数组初始化
+//保存本次运行的配置
 
+//进行初始化
 static const FlagDescription FlagDescriptions [] {
 #define FUZZER_DEPRECATED_FLAG(Name)                                           \
   {#Name, "Deprecated; don't use", 0, nullptr, nullptr, nullptr},
@@ -72,9 +73,9 @@ static const FlagDescription FlagDescriptions [] {
 };
 
 static const size_t kNumFlags =
-    sizeof(FlagDescriptions) / sizeof(FlagDescriptions[0]);
+    sizeof(FlagDescriptions) / sizeof(FlagDescriptions[0]); //flag的种类数量，为62
 
-static std::vector<std::string> *Inputs;
+static std::vector<std::string> *Inputs; //何用
 static std::string *ProgName;
 
 static void PrintHelp() {
@@ -192,12 +193,12 @@ static void ParseFlags(const std::vector<std::string> &Args) {
   }
 }
 
-static std::mutex Mu;
+static std::mutex Mu; // 定义互斥量操作对象
 
 static void PulseThread() {
   while (true) {
     SleepSeconds(600);
-    std::lock_guard<std::mutex> Lock(Mu);
+    std::lock_guard<std::mutex> Lock(Mu); //每个一定时间上锁，销毁，输出脉搏
     Printf("pulse...\n");
   }
 }
@@ -211,16 +212,16 @@ static void WorkerThread(const std::string &Cmd, std::atomic<unsigned> *Counter,
     std::string ToRun = Cmd + " > " + Log + " 2>&1\n";
     if (Flags.verbosity)
       Printf("%s", ToRun.c_str());
-    int ExitCode = ExecuteCommand(ToRun);
+    int ExitCode = ExecuteCommand(ToRun); //堵塞
     if (ExitCode != 0)
       *HasErrors = true;
-    std::lock_guard<std::mutex> Lock(Mu);
+    std::lock_guard<std::mutex> Lock(Mu); //写文件时上锁
     Printf("================== Job %u exited with exit code %d ============\n",
            C, ExitCode);
     fuzzer::CopyFileToErr(Log);
   }
 }
-
+// remove some args, and make a copy
 std::string CloneArgsWithoutX(const std::vector<std::string> &Args,
                               const char *X1, const char *X2) {
   std::string Cmd;
@@ -231,19 +232,20 @@ std::string CloneArgsWithoutX(const std::vector<std::string> &Args,
   }
   return Cmd;
 }
-
+//
 static int RunInMultipleProcesses(const std::vector<std::string> &Args,
                                   unsigned NumWorkers, unsigned NumJobs) {
-  std::atomic<unsigned> Counter(0);
+  std::atomic<unsigned> Counter(0); // std::atomic 对象访问不造成竞争-冒险
   std::atomic<bool> HasErrors(false);
   std::string Cmd = CloneArgsWithoutX(Args, "jobs", "workers");
   std::vector<std::thread> V;
   std::thread Pulse(PulseThread);
   Pulse.detach();
-  for (unsigned i = 0; i < NumWorkers; i++)
-    V.push_back(std::thread(WorkerThread, Cmd, &Counter, NumJobs, &HasErrors));
+  for (unsigned i = 0; i< NumWorkers; i++){
+    V.push_back(std::thread(WorkerThread, Cmd, &Counter, NumJobs, &HasErrors)); //新建之后立刻启动
+  }  
   for (auto &T : V)
-    T.join();
+    T.join(); //逐个等待结束
   return HasErrors ? 1 : 0;
 }
 
@@ -430,7 +432,7 @@ int FuzzerDriver(int *argc, char ***argv, UserCallback Callback) {
   std::string Argv0((*argv)[0]);
   EF = new ExternalFunctions(); //用new即表示struct结构,与类相似，调用其中的构造函数
   if (EF->LLVMFuzzerInitialize) //调试的时候没有进入
-    EF->LLVMFuzzerInitialize(argc, argv); //这个为什么是外部函数呢？应该是会在链接过程
+    EF->LLVMFuzzerInitialize(argc, argv); 
   const std::vector<std::string> Args(*argv, *argv + *argc);
   assert(!Args.empty());
   ProgName = new std::string(Args[0]);
@@ -450,7 +452,7 @@ int FuzzerDriver(int *argc, char ***argv, UserCallback Callback) {
     CloseStdout();
 
   if (Flags.jobs > 0 && Flags.workers == 0) {
-    Flags.workers = std::min(NumberOfCpuCores() / 2, Flags.jobs);
+    Flags.workers = std::min(NumberOfCpuCores(), Flags.jobs); //设定使用cpu的数量
     if (Flags.workers > 1)
       Printf("Running %u workers\n", Flags.workers);
   }
@@ -531,7 +533,7 @@ int FuzzerDriver(int *argc, char ***argv, UserCallback Callback) {
     if (U.size() <= Word::GetMaxSize())
       MD->AddWordToManualDictionary(Word(U.data(), U.size()));
 
-  StartRssThread(F, Flags.rss_limit_mb);//检测进程内存的线程
+  StartRssThread(F, Flags.rss_limit_mb);//检测进程内存的线程，detach进程
 
   Options.HandleAbrt = Flags.handle_abrt;
   Options.HandleBus = Flags.handle_bus;

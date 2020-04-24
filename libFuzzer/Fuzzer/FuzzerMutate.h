@@ -95,7 +95,7 @@ public:
 private:
 
   struct Mutator {
-    size_t (MutationDispatcher::*Fn)(uint8_t *Data, size_t Size, size_t Max);
+    size_t (MutationDispatcher::*Fn)(uint8_t *Data, size_t Size, size_t Max); //类中的函数指针
     const char *Name;
   };
 
